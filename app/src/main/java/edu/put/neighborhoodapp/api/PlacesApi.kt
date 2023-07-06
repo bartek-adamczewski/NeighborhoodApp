@@ -12,5 +12,5 @@ interface PlacesApi {
         @Query("radius") radius: Int,
         @Query("query") query: String,
         @Query("key") apiKey: String
-    ): PlacesResponse
+    ): Response<PlacesResponse>
 }
