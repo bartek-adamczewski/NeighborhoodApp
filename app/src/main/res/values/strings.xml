@@ -2,4 +2,6 @@
     <string name="app_name">NeighborhoodApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_text">Kliknij, aby sprawdzić lokalizację</string>
+    <string name="main_hint">Adres do sprawdzenia</string>
 </resources>

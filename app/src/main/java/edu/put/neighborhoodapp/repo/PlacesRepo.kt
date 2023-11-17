@@ -25,7 +25,7 @@ class PlacesRepo @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun getPlacesFromApi(location: String = "-33.8688,151.2093", radius: Int = 10000, query: String = "school"): List<PlaceEntity> = withContext(ioDispatcher) {
+    suspend fun getPlacesFromApi(location: String = "53.146572625154796, 17.598054268893183", radius: Int = 1000, query: String = "school"): List<PlaceEntity> = withContext(ioDispatcher) {
 
         val apiResult = wrapApiCall {
             placesApi.getPlaces(

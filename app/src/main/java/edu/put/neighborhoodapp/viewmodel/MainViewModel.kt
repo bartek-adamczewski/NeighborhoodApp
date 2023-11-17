@@ -1,22 +1,25 @@
 package edu.put.neighborhoodapp.viewmodel
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import edu.put.neighborhoodapp.di.GeocoderInterface
+import edu.put.neighborhoodapp.di.GeocoderModule
 import edu.put.neighborhoodapp.repo.PlacesRepo
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
+import java.util.*
+import javax.inject.Inject
 
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: PlacesRepo
+    private val repository: PlacesRepo,
+    private val geocoder: GeocoderInterface
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(State.DEFAULT)
@@ -24,17 +27,24 @@ class MainViewModel @Inject constructor(
     private val eventChannel = Channel<Event>(Channel.CONFLATED)
     val events = eventChannel.receiveAsFlow()
 
-    init {
+    fun getData(address: String) {
         viewModelScope.launch {
-            val places = repository.getPlacesFromApi()
-            _uiState.update { state ->
-                state.copy(data = places.toString())
+            val latLng = geocoder.getLatLngFromAddress(address)
+            if (latLng != null) {
+                eventChannel.send(Event.ShowToast(latLng.toString()))
+                //val places = repository.getPlacesFromApi(location = location)
+                //_uiState.update { state ->
+                //    state.copy(data = places.toString())
+                //}
+            } else {
+                eventChannel.send(Event.ShowToast("Pobranie danych dla podanego adresu nie udało się"))
             }
         }
     }
 
     data class State(
-        val data: String?
+        val data: String?,
+        //val places: List<Int>
     ) {
         companion object {
             val DEFAULT = State(
@@ -44,6 +54,6 @@ class MainViewModel @Inject constructor(
     }
 
     sealed class Event {
-        object getData : Event()
+        data class ShowToast(val message: String) : Event()
     }
 }

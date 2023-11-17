@@ -1,0 +1,71 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Wybierz interesujące cię miejsca"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+
+    <CheckBox
+        android:id="@+id/storesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Sklepy spożywcze" />
+
+    <CheckBox
+        android:id="@+id/gymsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Siłownie"/>
+
+    <CheckBox
+        android:id="@+id/busesCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Przystanki autobusowe"/>
+
+    <CheckBox
+        android:id="@+id/tramsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Przystanki tramwajowe"/>
+
+    <CheckBox
+        android:id="@+id/parksCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Parki"/>
+
+    <CheckBox
+        android:id="@+id/restaurantsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Restauracje"/>
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:layout_gravity="center"
+        android:text="Wybrano"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/teal_700"/>
+
+</LinearLayout>

@@ -4,10 +4,11 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(foreignKeys = arrayOf(ForeignKey(entity = LocationEntity::class,
+@Entity(foreignKeys = [ForeignKey(entity = LocationEntity::class,
     parentColumns = arrayOf("id"),
     childColumns = arrayOf("parentLocationId"),
-    onDelete = ForeignKey.CASCADE)))
+    onDelete = ForeignKey.CASCADE)]
+)
 data class PlaceEntity(
 
     @PrimaryKey(autoGenerate = false) val placeId: String,
