@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import edu.put.neighborhoodapp.api.DistanceApi
 import edu.put.neighborhoodapp.api.PlacesApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,4 +26,9 @@ class NetworkModule {
     fun gamesApi(retrofit: Retrofit): PlacesApi {
         return retrofit.create(PlacesApi::class.java)
     }
+
+    fun distanceApi(retrofit: Retrofit): DistanceApi {
+        return retrofit.create(DistanceApi::class.java)
+    }
+
 }

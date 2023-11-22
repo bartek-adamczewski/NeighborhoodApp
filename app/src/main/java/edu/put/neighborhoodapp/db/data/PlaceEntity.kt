@@ -21,8 +21,16 @@ data class PlaceEntity(
 
     val url: String?,
 
+    val photoHeight: Int?,
+
+    val photoWidth: Int?,
+
     val userRatingsTotal: Int,
 
-    val parentLocationId: Long
+    val parentLocationId: Long,
+
+    val distance: Int,
+
+    val time: Int
 
 )

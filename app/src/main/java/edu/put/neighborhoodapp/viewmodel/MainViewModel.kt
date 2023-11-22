@@ -2,12 +2,16 @@ package edu.put.neighborhoodapp.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import edu.put.neighborhoodapp.db.data.PlaceEntity
 import edu.put.neighborhoodapp.di.GeocoderInterface
 import edu.put.neighborhoodapp.di.GeocoderModule
+import edu.put.neighborhoodapp.fragments.FragmentType
 import edu.put.neighborhoodapp.repo.PlacesRepo
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -27,28 +31,68 @@ class MainViewModel @Inject constructor(
     private val eventChannel = Channel<Event>(Channel.CONFLATED)
     val events = eventChannel.receiveAsFlow()
 
-    fun getData(address: String) {
+    fun getData(query: String) {
         viewModelScope.launch {
-            val latLng = geocoder.getLatLngFromAddress(address)
+            val currentState = _uiState.value
+            val latLng = currentState.address?.let { geocoder.getLatLngFromAddress(it) }
             if (latLng != null) {
-                eventChannel.send(Event.ShowToast(latLng.toString()))
-                //val places = repository.getPlacesFromApi(location = location)
-                //_uiState.update { state ->
-                //    state.copy(data = places.toString())
-                //}
+                val lat = latLng[0].toString()
+                val lon = latLng[1].toString()
+                val places = repository.getPlacesFromApi("$lat, $lon", query = query)
+                when(query) {
+                    "Grocery store" -> _uiState.update { state ->
+                        state.copy(storesData = places)
+                    }
+                    "Gym" -> _uiState.update { state ->
+                        state.copy(gymsData = places)
+                    }
+                    "Bus stop" ->_uiState.update { state ->
+                        state.copy(busesData = places)
+                    }
+                    "Tram stop" ->_uiState.update { state ->
+                        state.copy(tramsData = places)
+                    }
+                    "Park" ->_uiState.update { state ->
+                        state.copy(parksData = places)
+                    }
+                    "Restaurant" ->_uiState.update { state ->
+                        state.copy(restaurantsData = places)
+                    }
+                }
             } else {
                 eventChannel.send(Event.ShowToast("Pobranie danych dla podanego adresu nie udało się"))
             }
         }
     }
 
+    fun getDistances() {
+
+    }
+
+    fun updateAddress(address: String) {
+        _uiState.update { state ->
+            state.copy(address = address.toString())
+        }
+    }
+
     data class State(
-        val data: String?,
-        //val places: List<Int>
+        val storesData: List<PlaceEntity>?,
+        val gymsData: List<PlaceEntity>?,
+        val busesData: List<PlaceEntity>?,
+        val tramsData: List<PlaceEntity>?,
+        val parksData: List<PlaceEntity>?,
+        val restaurantsData: List<PlaceEntity>?,
+        val address: String?
     ) {
         companion object {
             val DEFAULT = State(
-                data = null
+                storesData = null,
+                gymsData = null,
+                busesData = null,
+                tramsData = null,
+                parksData = null,
+                restaurantsData = null,
+                address = null
             )
         }
     }

@@ -7,20 +7,20 @@ import java.io.IOException
 import java.util.*
 
 interface GeocoderInterface {
-    fun getLatLngFromAddress(address: String): Pair<Double, Double>?
+    fun getLatLngFromAddress(address: String): List<String>?
 }
 
 class GeocoderInterfaceImpl(
     private val context: Context
 ) : GeocoderInterface {
 
-    override fun getLatLngFromAddress( address: String): Pair<Double, Double>? {
+    override fun getLatLngFromAddress( address: String): List<String>? {
         val geocoder = Geocoder(context, Locale.getDefault())
         return try {
             val addressList = geocoder.getFromLocationName(address, 1)
             if (addressList?.isNotEmpty() == true) {
                 val location = addressList[0]
-                Pair(location.latitude, location.longitude)
+                listOf(location.latitude.toString(), location.longitude.toString())
             } else {
                 null
             }

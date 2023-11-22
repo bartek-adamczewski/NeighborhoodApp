@@ -1,12 +1,12 @@
 package edu.put.neighborhoodapp.repo
 
-import android.util.Log
-import edu.put.neighborhoodapp.BuildConfig
+import edu.put.neighborhoodapp.api.DistanceApi
 import edu.put.neighborhoodapp.api.PlacesApi
-import edu.put.neighborhoodapp.data.Location
 import edu.put.neighborhoodapp.data.PlacesResponse
+import edu.put.neighborhoodapp.data.distance.DistanceResponse
 import edu.put.neighborhoodapp.db.PlacesDao
 import edu.put.neighborhoodapp.db.PlacesDatabase
+import edu.put.neighborhoodapp.db.data.DistanceEntity
 import edu.put.neighborhoodapp.db.data.LocationEntity
 import edu.put.neighborhoodapp.db.data.PlaceEntity
 import edu.put.neighborhoodapp.di.IoDispatcher
@@ -14,18 +14,17 @@ import edu.put.neighborhoodapp.util.PlacesApiResult
 import edu.put.neighborhoodapp.util.wrapApiCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class PlacesRepo @Inject constructor(
     private val placesApi: PlacesApi,
+    private val distanceApi: DistanceApi,
     private val placesDao: PlacesDao,
     private val placesDb: PlacesDatabase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun getPlacesFromApi(location: String = "53.146572625154796, 17.598054268893183", radius: Int = 1000, query: String = "school"): List<PlaceEntity> = withContext(ioDispatcher) {
+    suspend fun getPlacesFromApi(location: String, radius: Int = 1000, query: String): List<PlaceEntity> = withContext(ioDispatcher) {
 
         val apiResult = wrapApiCall {
             placesApi.getPlaces(
@@ -46,6 +45,18 @@ class PlacesRepo @Inject constructor(
         }
     }
 
+    suspend fun getDistance(origin: String, destinations: List<String>): List<DistanceEntity> {
+        val apiResult = distanceApi.getDistance(
+            origin = origin,
+            destinations = destinations,
+            apiKey = "AIzaSyDJnXRHz_2npafDquVzUx8vJokkm3PAxto",
+            mode = "walking",
+            units = "METRIC"
+        )
+
+        return apiResult.getDistances(origin, destinations)
+    }
+
     private fun PlacesResponse.getAllPlaces(locationId: Long) : List<PlaceEntity> =
         results.map {
             PlaceEntity(
@@ -55,9 +66,27 @@ class PlacesRepo @Inject constructor(
                 rating = it.rating,
                 url = if (it.photos != null) {
                     it.photos[0].photo_reference } else { null },
+                photoHeight = if(it.photos != null) {
+                    it.photos[0].height } else { null },
+                photoWidth = if(it.photos != null) {
+                    it.photos[0].width } else { null },
                 userRatingsTotal = it.user_ratings_total,
-                parentLocationId = locationId
+                parentLocationId = locationId,
+                distance = 1,
+                time = 1
             )
         }
+
+    private fun DistanceResponse.getDistances(origin: String, destinations: List<String>) : List<DistanceEntity> {
+        var i = 0
+        return rows.map {
+            DistanceEntity(
+                distance = it.elements[0].distance.value.toString(),
+                time = it.elements[0].duration.value.toString(),
+                placeMain = origin,
+                placeName = destinations[i++]
+            )
+        }
+    }
 
 }

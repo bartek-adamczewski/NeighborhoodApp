@@ -13,18 +13,18 @@ import edu.put.neighborhoodapp.R
 import edu.put.neighborhoodapp.db.data.LocationEntity
 import edu.put.neighborhoodapp.db.data.PlaceWithLocation
 
-class SavedPlacesAdapter(private val onItemClickListener: (location : String) -> Unit) : androidx.recyclerview.widget.ListAdapter<LocationEntity, SavedPlacesAdapter.GameViewHolder>(GameDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
+class SavedPlacesAdapter(private val onItemClickListener: (location : String) -> Unit) : androidx.recyclerview.widget.ListAdapter<LocationEntity, SavedPlacesAdapter.LocationViewHolder>(GameDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.saved_places_recycler_view, parent, false)
-        return GameViewHolder(itemView)
+        return LocationViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
         val place = getItem(position)
         holder.bind(place)
     }
 
-    inner class GameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val mark = itemView.findViewById<TextView>(R.id.markTextView)
         private val location = itemView.findViewById<TextView>(R.id.locationTextView)
