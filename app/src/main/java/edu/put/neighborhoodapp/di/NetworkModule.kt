@@ -27,6 +27,7 @@ class NetworkModule {
         return retrofit.create(PlacesApi::class.java)
     }
 
+    @Provides
     fun distanceApi(retrofit: Retrofit): DistanceApi {
         return retrofit.create(DistanceApi::class.java)
     }

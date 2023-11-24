@@ -29,8 +29,8 @@ data class PlaceEntity(
 
     val parentLocationId: Long,
 
-    val distance: Int,
+    var distance: Int,
 
-    val time: Int
+    var time: Int
 
 )

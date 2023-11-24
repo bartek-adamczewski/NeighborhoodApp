@@ -17,6 +17,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Get the API keys from local.properties
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        // Set API keys in BuildConfig
+        buildConfigField "String", "PLACES_API_KEY", "\"${properties.getProperty("PLACES_API_KEY")}\""
+        buildConfigField "String", "DISTANCE_API_KEY", "\"${properties.getProperty("DISTANCE_API_KEY")}\""
     }
 
     buildFeatures{

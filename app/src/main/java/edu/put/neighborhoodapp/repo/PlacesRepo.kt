@@ -1,5 +1,6 @@
 package edu.put.neighborhoodapp.repo
 
+import edu.put.neighborhoodapp.BuildConfig
 import edu.put.neighborhoodapp.api.DistanceApi
 import edu.put.neighborhoodapp.api.PlacesApi
 import edu.put.neighborhoodapp.data.PlacesResponse
@@ -31,9 +32,10 @@ class PlacesRepo @Inject constructor(
                 location = location,
                 radius = radius,
                 query = query,
-                apiKey = "AIzaSyDxtJjgi6UfDQrRUQ89FsIFWBAQWAawUwQ"
+                apiKey = BuildConfig.PLACES_API_KEY
             )
         }
+
         when(apiResult) {
             is PlacesApiResult.Exception -> { return@withContext emptyList() }
             is PlacesApiResult.Success -> {
@@ -49,7 +51,7 @@ class PlacesRepo @Inject constructor(
         val apiResult = distanceApi.getDistance(
             origin = origin,
             destinations = destinations,
-            apiKey = "AIzaSyDJnXRHz_2npafDquVzUx8vJokkm3PAxto",
+            apiKey = BuildConfig.DISTANCE_API_KEY,
             mode = "walking",
             units = "METRIC"
         )
@@ -81,8 +83,8 @@ class PlacesRepo @Inject constructor(
         var i = 0
         return rows.map {
             DistanceEntity(
-                distance = it.elements[0].distance.value.toString(),
-                time = it.elements[0].duration.value.toString(),
+                distance = it.elements[0].distance.value,
+                time = it.elements[0].duration.value,
                 placeMain = origin,
                 placeName = destinations[i++]
             )

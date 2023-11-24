@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import edu.put.neighborhoodapp.db.data.DistanceEntity
 import edu.put.neighborhoodapp.db.data.PlaceEntity
 import edu.put.neighborhoodapp.di.GeocoderInterface
 import edu.put.neighborhoodapp.di.GeocoderModule
@@ -39,6 +40,7 @@ class MainViewModel @Inject constructor(
                 val lat = latLng[0].toString()
                 val lon = latLng[1].toString()
                 val places = repository.getPlacesFromApi("$lat, $lon", query = query)
+
                 when(query) {
                     "Grocery store" -> _uiState.update { state ->
                         state.copy(storesData = places)
@@ -59,13 +61,31 @@ class MainViewModel @Inject constructor(
                         state.copy(restaurantsData = places)
                     }
                 }
+
+                val destinations = mutableListOf<PlaceEntity>()
+                //for (place in places) {
+                //    destinations.add(place.address)
+                //}
+
             } else {
                 eventChannel.send(Event.ShowToast("Pobranie danych dla podanego adresu nie udało się"))
             }
+
+
+
+            //val distances = repository.getDistance(currentState.address.toString(), destinationsAddresses)
+
+
+            //var i = 0
+            //for(distance in distances) {
+            //    places[i].distance = distance.distance
+            //    places[i].time = distance.time
+             //   i++
+            //}
         }
     }
 
-    fun getDistances() {
+    fun getDistances(query: String, ) {
 
     }
 

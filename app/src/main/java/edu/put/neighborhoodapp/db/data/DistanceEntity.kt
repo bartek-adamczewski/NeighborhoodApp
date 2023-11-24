@@ -10,8 +10,8 @@ data class DistanceEntity(
 
     val placeMain: String,
 
-    val distance: String,
+    val distance: Int,
 
-    val time: String
+    val time: Int
 
 )
