@@ -18,9 +18,6 @@ suspend fun <D> wrapApiCall(
     apiCall: suspend () -> Response<D>
 ): PlacesApiResult<D> = try {
     val response = apiCall()
-    if (response.code() == 202) {
-        throw AcceptedResponse()
-    }
     PlacesApiResult.Success(data = response.body() ?: throw Exception("No body"))
 } catch (t: Throwable) {
     PlacesApiResult.Exception(

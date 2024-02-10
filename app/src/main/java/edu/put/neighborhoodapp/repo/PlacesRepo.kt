@@ -37,10 +37,21 @@ class PlacesRepo @Inject constructor(
         }
 
         when(apiResult) {
-            is PlacesApiResult.Exception -> { return@withContext emptyList() }
+            is PlacesApiResult.Exception -> return@withContext emptyList()
             is PlacesApiResult.Success -> {
                 val locId = placesDao.insertLocation(LocationEntity(location = location))
-                val placesEntities = apiResult.data.getAllPlaces(locId)
+                var placesEntities = apiResult.data.getAllPlaces(locId)
+
+                val destinations = placesEntities.map { it.address }.toList()
+                val distancesResult = getDistance(location, destinations)
+
+                placesEntities = placesEntities.mapIndexed { index, placeEntity ->
+                    placeEntity.apply {
+                        distance = distancesResult[index].distance
+                        time = distancesResult[index].time
+                    }
+                }
+
                 placesDao.insertPlaces(placesEntities)
                 return@withContext placesEntities
             }
@@ -48,14 +59,14 @@ class PlacesRepo @Inject constructor(
     }
 
     suspend fun getDistance(origin: String, destinations: List<String>): List<DistanceEntity> {
+        val destinationsString = destinations.joinToString("|")
         val apiResult = distanceApi.getDistance(
             origin = origin,
-            destinations = destinations,
+            destinations = destinationsString,
             apiKey = BuildConfig.DISTANCE_API_KEY,
             mode = "walking",
-            units = "METRIC"
+            units = "metric"
         )
-
         return apiResult.getDistances(origin, destinations)
     }
 
@@ -81,13 +92,16 @@ class PlacesRepo @Inject constructor(
 
     private fun DistanceResponse.getDistances(origin: String, destinations: List<String>) : List<DistanceEntity> {
         var i = 0
-        return rows.map {
-            DistanceEntity(
-                distance = it.elements[0].distance.value,
-                time = it.elements[0].duration.value,
-                placeMain = origin,
-                placeName = destinations[i++]
-            )
+        return rows.flatMap {
+            it.elements.map { e->
+                DistanceEntity(
+                    distance = e.distance.value,
+                    time = e.duration.value,
+                    placeMain = origin,
+                    placeName = destinations[i++]
+                )
+            }
+
         }
     }
 

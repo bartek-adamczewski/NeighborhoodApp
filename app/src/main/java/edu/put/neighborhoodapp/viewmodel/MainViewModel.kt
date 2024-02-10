@@ -34,59 +34,40 @@ class MainViewModel @Inject constructor(
 
     fun getData(query: String) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             val currentState = _uiState.value
             val latLng = currentState.address?.let { geocoder.getLatLngFromAddress(it) }
             if (latLng != null) {
                 val lat = latLng[0].toString()
                 val lon = latLng[1].toString()
                 val places = repository.getPlacesFromApi("$lat, $lon", query = query)
-
+                val sortedPlacesList = places.sortedBy { it.distance }
+                _uiState.update { it.copy(isLoading = false) }
                 when(query) {
                     "Grocery store" -> _uiState.update { state ->
-                        state.copy(storesData = places)
+                        state.copy(storesData = sortedPlacesList)
                     }
                     "Gym" -> _uiState.update { state ->
-                        state.copy(gymsData = places)
+                        state.copy(gymsData = sortedPlacesList)
                     }
                     "Bus stop" ->_uiState.update { state ->
-                        state.copy(busesData = places)
+                        state.copy(busesData = sortedPlacesList)
                     }
                     "Tram stop" ->_uiState.update { state ->
-                        state.copy(tramsData = places)
+                        state.copy(tramsData = sortedPlacesList)
                     }
                     "Park" ->_uiState.update { state ->
-                        state.copy(parksData = places)
+                        state.copy(parksData = sortedPlacesList)
                     }
                     "Restaurant" ->_uiState.update { state ->
-                        state.copy(restaurantsData = places)
+                        state.copy(restaurantsData = sortedPlacesList)
                     }
                 }
-
-                val destinations = mutableListOf<PlaceEntity>()
-                //for (place in places) {
-                //    destinations.add(place.address)
-                //}
 
             } else {
                 eventChannel.send(Event.ShowToast("Pobranie danych dla podanego adresu nie udało się"))
             }
-
-
-
-            //val distances = repository.getDistance(currentState.address.toString(), destinationsAddresses)
-
-
-            //var i = 0
-            //for(distance in distances) {
-            //    places[i].distance = distance.distance
-            //    places[i].time = distance.time
-             //   i++
-            //}
         }
-    }
-
-    fun getDistances(query: String, ) {
-
     }
 
     fun updateAddress(address: String) {
@@ -102,7 +83,8 @@ class MainViewModel @Inject constructor(
         val tramsData: List<PlaceEntity>?,
         val parksData: List<PlaceEntity>?,
         val restaurantsData: List<PlaceEntity>?,
-        val address: String?
+        val address: String?,
+        val isLoading: Boolean = false
     ) {
         companion object {
             val DEFAULT = State(
@@ -112,7 +94,8 @@ class MainViewModel @Inject constructor(
                 tramsData = null,
                 parksData = null,
                 restaurantsData = null,
-                address = null
+                address = null,
+                isLoading = false
             )
         }
     }

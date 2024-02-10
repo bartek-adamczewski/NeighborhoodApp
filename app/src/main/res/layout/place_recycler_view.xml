@@ -32,18 +32,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
-    <TextView
-        android:id="@+id/markTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/cardViewPhoto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/cardViewPhoto"
-        app:layout_constraintEnd_toEndOf="@+id/cardViewPhoto"
-        android:textSize="17sp"
-        android:fontFamily="serif-monospace"/>
-
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="0dp"
@@ -57,15 +45,67 @@
         android:fontFamily="serif-monospace"
         />
 
+    <ImageView
+        android:id="@+id/ratingIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/markTextView"
+        app:layout_constraintEnd_toStartOf="@+id/markTextView"
+        android:src="@drawable/img_1"
+        />
+
+
     <TextView
-        android:id="@+id/distanceTextView"
-        android:layout_width="0dp"
+        android:id="@+id/markTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cardViewPhoto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/cardViewPhoto"
+        app:layout_constraintEnd_toEndOf="@+id/cardViewPhoto"
+        android:textSize="20sp"
+        android:fontFamily="serif-monospace"/>
+
+    <ImageView
+        android:id="@+id/walkIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/markTextView"
+        app:layout_constraintEnd_toStartOf="@+id/walkTextView"
+        android:src="@drawable/img"
+        />
+
+    <TextView
+        android:id="@+id/walkTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/markTextView"
-        app:layout_constraintStart_toEndOf="@+id/cardViewPhoto"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="17sp"
-        android:text="Odległość: 1 km"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:fontFamily="serif-monospace"
+        android:layout_marginEnd="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/distanceIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/markTextView"
+        app:layout_constraintEnd_toStartOf="@+id/distanceTextView"
+        android:src="@drawable/img_3"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="3dp"
+        />
+
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/markTextView"
+        app:layout_constraintStart_toEndOf="@id/markTextView"
+        app:layout_constraintEnd_toStartOf="@+id/walkTextView"
+        android:textSize="20sp"
         android:gravity="center"
         android:fontFamily="serif-monospace"
         />

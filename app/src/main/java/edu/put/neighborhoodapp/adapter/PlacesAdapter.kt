@@ -37,6 +37,7 @@ class PlacesAdapter(private val onItemClickListener: (location : String) -> Unit
         private val mark = itemView.findViewById<TextView>(R.id.markTextView)
         private val name = itemView.findViewById<TextView>(R.id.nameTextView)
         private val photo = itemView.findViewById<ImageView>(R.id.photoImageView)
+        private val walk = itemView.findViewById<TextView>(R.id.walkTextView)
         private val distance = itemView.findViewById<TextView>(R.id.distanceTextView)
         private lateinit var argument: String
 
@@ -50,7 +51,7 @@ class PlacesAdapter(private val onItemClickListener: (location : String) -> Unit
         @SuppressLint("SetTextI18n")
         fun bind(place: PlaceEntity) {
             argument = place.name
-            mark.text = "Ocena: ${place.rating}"
+            mark.text = " ${place.rating}"
             name.text = place.name
             if(place.url != null) {
                 val link = PhotoLinkProvider.getPhotoLink(place.photoWidth.toString(),place.photoHeight.toString(),place.url)
@@ -75,7 +76,10 @@ class PlacesAdapter(private val onItemClickListener: (location : String) -> Unit
                     .centerCrop()
                     .into(photo)
             }
-            //distance.text = place.distance.toString()
+            walk.text = (place.time / 60).toString() + "min"
+            val distanceInKilometers = place.distance.toFloat() / 1000
+            val formattedDistance = String.format("%.1f", distanceInKilometers)
+            distance.text = formattedDistance + "km"
         }
     }
 

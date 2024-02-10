@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -59,6 +60,17 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.uiState.onEach { state ->
+            if (state.isLoading) {
+                val rotation = AnimationUtils.loadAnimation(context, R.anim.rotate)
+                binding.loadingImage.startAnimation(rotation)
+                binding.loadingImage.visibility = View.VISIBLE
+            } else {
+                binding.loadingImage.clearAnimation()
+                binding.loadingImage.visibility = View.GONE
+            }
+        }.launchIn(lifecycleScope)
 
         viewModel.uiState.onEach { state ->
             binding.typeTextView.text = when (fragmentType) {

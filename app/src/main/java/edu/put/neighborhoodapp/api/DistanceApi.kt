@@ -10,7 +10,7 @@ interface DistanceApi {
     @GET("/maps/api/distancematrix/json")
     suspend fun getDistance(
         @Query("origins") origin: String,
-        @Query("destinations") destinations: List<String>,
+        @Query("destinations") destinations: String,
         @Query("key") apiKey: String,
         @Query("mode") mode: String,
         @Query("units") units: String
