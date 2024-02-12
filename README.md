@@ -1,6 +1,7 @@
 # NeighborhoodApp
 
 **Fast and Easy Information Retrieval**: The app quickly fetches the most essential information about a given location's surroundings.
+
 **Utility Examples**:
   - Checking out what's around a potential rental property.
   - Exploring the amenities of a new neighborhood.
