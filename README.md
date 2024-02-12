@@ -1,17 +1,14 @@
 # NeighborhoodApp
 
-NeighborhoodApp is an application designed to provide quick and essential information about the surroundings of a specified location. 
-
-## Features
-
-- **Fast and Easy Information Retrieval**: The app quickly fetches the most essential information about a given location's surroundings.
-- **Utility Examples**:
+**Fast and Easy Information Retrieval**: The app quickly fetches the most essential information about a given location's surroundings.
+**Utility Examples**:
   - Checking out what's around a potential rental property.
   - Exploring the amenities of a new neighborhood.
-- **How It Works**:
+    
+## How It Works:
   1. The main screen features an input field to enter the location you want to explore.
   2. Upon confirmation, you can select the type of facilities you're interested in, such as shops, gyms, or public transport stops.
-  3. The location is converted to coordinates, and a call is made to the Places API to retrieve a list of places.
+  3. The location is converted to coordinates, and a call is made to retrieve a list of places.
   4. Subsequently, a call is made to calculate the distances between these places and the main location.
   5. The results are displayed in a list sorted by distance from the main location.
 
