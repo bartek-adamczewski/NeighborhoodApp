@@ -30,3 +30,7 @@
 ## Getting Started
 
 To run the LocalExplorer app, clone the repository, and insert your Google API keys into the appropriate configuration files.
+
+## Video
+
+Check out the [demo video](https://drive.google.com/file/d/1-U-GYnQ994bF6w-hTnjcWtekNdb9pbcf/view) to see the app in action.
